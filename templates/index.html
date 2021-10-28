@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>City Insights</title>
+</head>
+<body>
+
+
+
+<div class="container" style="display:flex; align-items: center;justify-content: center;">
+    
+    <center>
+        <div>
+            <center>
+                <h1>City Insight</h1>
+            </center>
+        </div>
+        <input type="text" class="city_search" placeholder="Enter city to search" id="search_input" oninput="search_city()" />
+        <div>
+            <p id="no_of_cities"></p>
+        </div>
+        <div>
+            <ul id="cities"></ul>
+        </div>
+
+    </center>
+</div>
+
+
+<script>
+
+    function fetch_data(value){
+        fetch("/get_city?query="+value).then(function(data){
+            data.json().then(function(c){
+                document.getElementById("cities").innerHTML = ""
+                c.cities.forEach(create_list)
+                update_city_count(c.no_of_cities)
+            })
+        })
+    }
+
+    function create_list(item)
+    {
+        var list = document.getElementById("cities");
+        var city = document.createElement('li');
+        city.appendChild(document.createTextNode(item));
+        list.appendChild(city)
+    }
+
+    function update_city_count(item)
+    {
+        
+        document.getElementById("no_of_cities").innerHTML = "Number of Cities: " + item;
+        
+    }
+
+    function search_city()
+    {
+        var value = document.getElementById('search_input').value;
+        fetch_data(value)
+    }
+
+</script>
+
+<style>
+    html,body,div {height:100%}
+    input {width: 300px; font-size: 18pt;}
+    body {border: orangered; border-radius: 10px; border-style: double; background-color: powderblue;}
+</style>
+
+</body>
+</html>
